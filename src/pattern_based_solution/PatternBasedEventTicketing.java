@@ -140,6 +140,18 @@ class PromoDiscountDecorator extends PriceDecorator {
     }
 }
 
+// Dynamic Pricing for High Demand Event
+class HighDemandDecorator extends PriceDecorator {
+    public HighDemandDecorator(PriceComponent inner) {
+        super(inner);
+    }
+
+    @Override
+    public double getPrice() {
+        return inner.getPrice() * 1.20;
+    }
+}
+
 class PricingEngine {
 
     public double calculateFinalPrice(Event event, List<SeatZone> seats, MembershipTier tier, Promo promo) {
@@ -169,6 +181,10 @@ class PricingEngine {
             price = new PromoDiscountDecorator(price, promo);
         }
 
+        if(event.isHighDemand()) {
+            price = new HighDemandDecorator(price);
+        }
+
         double finalTotal = price.getPrice();
         if (finalTotal < 0) finalTotal = 0;
 
@@ -186,7 +202,7 @@ public class PatternBasedEventTicketing {
         PricingEngine engine = new PricingEngine();
 
         // 1) Concert – Weekend + GOLD + 10% Promo
-        Event concert = new Event("Campus Concert", true, 5.00);
+        Event concert = new Event("Campus Concert", true, 5.00, true);
         List<SeatZone> concertSeats = List.of(SeatZone.VIP, SeatZone.VIP, SeatZone.PREMIUM);
         Promo concertPromo = new Promo(PromoType.STUDENT, 15.0);
 
@@ -201,7 +217,7 @@ public class PatternBasedEventTicketing {
         System.out.println();
 
         // 2) Movie Night – Weekday + NO discount
-        Event movieNight = new Event("Movie Night", false, 2.00);
+        Event movieNight = new Event("Movie Night", false, 2.00, false);
         List<SeatZone> movieSeats = List.of(SeatZone.STANDARD, SeatZone.STANDARD, SeatZone.STANDARD);
 
         double movieTotal = engine.calculateFinalPrice(movieNight, movieSeats, MembershipTier.NONE, null);
@@ -216,7 +232,7 @@ public class PatternBasedEventTicketing {
 
 
         // 3) Sport Day – Weekend + SILVER + RM15 FIXED Promo
-        Event sportDay = new Event("Campus Sport Day", true, 5.00);
+        Event sportDay = new Event("Campus Sport Day", true, 5.00, false);
         List<SeatZone> sportSeats = List.of(SeatZone.BALCONY, SeatZone.BALCONY, SeatZone.BALCONY);
         Promo sportPromo = new Promo(PromoType.FIXED, 15.0);
 

@@ -64,6 +64,11 @@ class PricingServices {
             }
         }
 
+        // 5) Dynamic Pricing for High Demand Event
+        if(event.isHighDemand()) {
+            subtotal *= 1.20;
+        }
+
         // Prevent negative totals
         if (subtotal < 0) subtotal = 0;
 
@@ -78,7 +83,7 @@ public class SimpleEventTicketing {
         PricingServices pricing = new PricingServices();
 
         // 1) Concert – Weekend + GOLD + 10% Promo
-        Event concert = new Event("Campus Concert", true, 5.00);
+        Event concert = new Event("Campus Concert", true, 5.00, true);
 
         List<SeatZone> selectedSeats = new ArrayList<>();
         selectedSeats.add(SeatZone.VIP);
@@ -98,7 +103,7 @@ public class SimpleEventTicketing {
         System.out.println("Final Total: RM " + total);
 
         // 2) Movie Night – Weekday + NO discount
-        Event movieNight = new Event("Movie Night", false, 2.00);
+        Event movieNight = new Event("Movie Night", false, 2.00, false);
         List<SeatZone> seats2 =
                 List.of(SeatZone.STANDARD, SeatZone.STANDARD, SeatZone.STANDARD);
 
@@ -114,7 +119,7 @@ public class SimpleEventTicketing {
         System.out.println("Final Total: RM " + total2);
 
         // 3) Sport Day – Weekend + SILVER + RM15 FIXED Promo
-        Event sportDay = new Event("Campus Sport Day", true, 5.00);
+        Event sportDay = new Event("Campus Sport Day", true, 5.00, false);
         Promo promoFixed15 = new Promo(PromoType.FIXED, 15.0);
         List<SeatZone> seats3 =
                 List.of(SeatZone.BALCONY, SeatZone.BALCONY, SeatZone.BALCONY);
