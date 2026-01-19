@@ -1,5 +1,5 @@
 package ticketing;
 
 public enum SeatZone {
-    VIP, STANDARD, BALCONY
+    VIP, STANDARD, BALCONY, PREMIUM
 }

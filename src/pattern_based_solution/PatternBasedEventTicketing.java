@@ -15,6 +15,10 @@ class VipSeatPricing implements SeatPricing {
     }
 }
 
+class PremiumSeatPricing implements SeatPricing {
+    public double getBasePrice() { return 120.0; }
+}
+
 class StandardSeatPricing implements SeatPricing {
     public double getBasePrice() {
         return 80.0;
@@ -31,6 +35,7 @@ class SeatPricingStrategyFactory {
     public static SeatPricing create(SeatZone zone) {
         return switch (zone) {
             case VIP -> new VipSeatPricing();
+            case PREMIUM -> new PremiumSeatPricing();
             case STANDARD -> new StandardSeatPricing();
             case BALCONY -> new BalconySeatPricing();
         };
@@ -181,7 +186,7 @@ public class PatternBasedEventTicketing {
 
         // 1) Concert – Weekend + GOLD + 10% Promo
         Event concert = new Event("Campus Concert", true, 5.00);
-        List<SeatZone> concertSeats = List.of(SeatZone.VIP, SeatZone.VIP, SeatZone.STANDARD);
+        List<SeatZone> concertSeats = List.of(SeatZone.VIP, SeatZone.VIP, SeatZone.PREMIUM);
         Promo concertPromo = new Promo(PromoType.PERCENT, 10.0);
 
         double concertTotal = engine.calculateFinalPrice(concert, concertSeats, MembershipTier.GOLD, concertPromo);

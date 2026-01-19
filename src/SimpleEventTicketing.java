@@ -24,6 +24,7 @@ class PricingServices {
             // Base seat price
             switch (zone) {
                 case VIP -> seatPrice = 180.0;
+                case PREMIUM -> seatPrice = 120.0;
                 case STANDARD -> seatPrice = 80.0;
                 case BALCONY -> seatPrice = 60.0;
                 default -> throw new IllegalArgumentException("Unknown seat zone");
@@ -81,7 +82,7 @@ public class SimpleEventTicketing {
         List<SeatZone> selectedSeats = new ArrayList<>();
         selectedSeats.add(SeatZone.VIP);
         selectedSeats.add(SeatZone.VIP);
-        selectedSeats.add(SeatZone.STANDARD);
+        selectedSeats.add(SeatZone.PREMIUM);
 
         Promo promo = new Promo(PromoType.PERCENT, 10.0);
 
