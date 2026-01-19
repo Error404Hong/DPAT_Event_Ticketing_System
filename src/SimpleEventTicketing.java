@@ -56,6 +56,7 @@ class PricingServices {
             switch (promo.getType()) {
                 case PERCENT -> subtotal *= (1.0 - promo.getValue() / 100.0);
                 case FIXED -> subtotal -= promo.getValue();
+                case STUDENT -> subtotal *= (1.0 - promo.getValue() / 100.0);
                 case NONE -> {
                     // no promo
                 }
@@ -84,7 +85,7 @@ public class SimpleEventTicketing {
         selectedSeats.add(SeatZone.VIP);
         selectedSeats.add(SeatZone.PREMIUM);
 
-        Promo promo = new Promo(PromoType.PERCENT, 10.0);
+        Promo promo = new Promo(PromoType.STUDENT, 15.0);
 
         double total = pricing.calculateFinalPrice(
                 concert, selectedSeats, MembershipTier.GOLD, promo);

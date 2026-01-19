@@ -134,6 +134,7 @@ class PromoDiscountDecorator extends PriceDecorator {
         return switch (promo.getType()) {
             case PERCENT -> p * (1.0 - promo.getValue() / 100.0);
             case FIXED -> p - promo.getValue();
+            case STUDENT -> p * (1.0 - promo.getValue() / 100.0);
             case NONE -> p;
         };
     }
@@ -187,7 +188,7 @@ public class PatternBasedEventTicketing {
         // 1) Concert – Weekend + GOLD + 10% Promo
         Event concert = new Event("Campus Concert", true, 5.00);
         List<SeatZone> concertSeats = List.of(SeatZone.VIP, SeatZone.VIP, SeatZone.PREMIUM);
-        Promo concertPromo = new Promo(PromoType.PERCENT, 10.0);
+        Promo concertPromo = new Promo(PromoType.STUDENT, 15.0);
 
         double concertTotal = engine.calculateFinalPrice(concert, concertSeats, MembershipTier.GOLD, concertPromo);
 

@@ -1,5 +1,5 @@
 package ticketing;
 
 public enum PromoType {
-    NONE, PERCENT, FIXED
+    NONE, PERCENT, FIXED, STUDENT
 }
