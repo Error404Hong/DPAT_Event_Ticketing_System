@@ -17,6 +17,9 @@ class PricingServices {
 
         double subtotal = 0.0;
 
+        int vipCount = 0;
+        double lowestSeatPrice = Double.MAX_VALUE;
+
         // 1) Calculate per-seat price and sum
         for (SeatZone zone : zoneList) {
             double seatPrice;
@@ -35,7 +38,22 @@ class PricingServices {
                 seatPrice *= 1.10; // +10%
             }
 
+            // NEW: VIP count
+            if (zone == SeatZone.VIP) {
+                vipCount++;
+            }
+
+            // NEW: track lowest seat price in the cart
+            if (seatPrice < lowestSeatPrice) {
+                lowestSeatPrice = seatPrice;
+            }
+
             subtotal += seatPrice;
+        }
+
+        // NEW RULE: Buy >3 VIP tickets -> 1 free ticket (lowest price)
+        if (vipCount > 3) {
+            subtotal -= lowestSeatPrice;
         }
 
         // 2) Booking fee applied once
@@ -56,7 +74,6 @@ class PricingServices {
             switch (promo.getType()) {
                 case PERCENT -> subtotal *= (1.0 - promo.getValue() / 100.0);
                 case FIXED -> subtotal -= promo.getValue();
-                case STUDENT -> subtotal *= (1.0 - promo.getValue() / 100.0);
                 case NONE -> {
                     // no promo
                 }
@@ -88,9 +105,10 @@ public class SimpleEventTicketing {
         List<SeatZone> selectedSeats = new ArrayList<>();
         selectedSeats.add(SeatZone.VIP);
         selectedSeats.add(SeatZone.VIP);
-        selectedSeats.add(SeatZone.PREMIUM);
+        selectedSeats.add(SeatZone.VIP);
+        selectedSeats.add(SeatZone.VIP);
 
-        Promo promo = new Promo(PromoType.STUDENT, 15.0);
+        Promo promo = new Promo(PromoType.PERCENT, 10.0);
 
         double total = pricing.calculateFinalPrice(
                 concert, selectedSeats, MembershipTier.GOLD, promo);

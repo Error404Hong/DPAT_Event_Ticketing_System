@@ -27,3 +27,4 @@ public class Event {
 
     public boolean isHighDemand() { return isHighDemand; }
 }
+
